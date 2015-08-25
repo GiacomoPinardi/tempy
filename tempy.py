@@ -6,13 +6,9 @@ from os.path import exists
 import numpy
 
 # refresh time
-global delay
 delay = 1
 
-global mainFolder
 mainFolder = "/sys/bus/platform/devices/coretemp.0/hwmon/hwmon0/"
-
-global data
 
 # color
 BLACK = '\033[0m'
@@ -41,16 +37,15 @@ def readCoresInformation ():
                 maxCore = number
 
     # generating 2D array with numpy
-    global data
     data = numpy.empty((int(maxCore), 2), dtype='object')
 
     for i in range(int(maxCore)):
         data[i][0] = readLabel(i+1)
         data[i][1] = readValues(i+1)
 
-def printCoreInformation () :
-    global data
+    return data
 
+def printCoreInformation (data) :
     # clear cli
     print "\033c"
 
@@ -80,9 +75,8 @@ def readLabel (coreNumber) :
 
 def loop():
     if exists(mainFolder):
-        while True:
-            readCoresInformation()
-            printCoreInformation()
+        while True:            
+            printCoreInformation(readCoresInformation())
             sleep(delay)
     else:
         print "Cannot find " + mainFolder + "\nAre you on Linux?"
