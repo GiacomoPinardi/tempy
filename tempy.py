@@ -63,7 +63,7 @@ def printCoreInformation (data) :
         toPrint += d[1] + BLACK + unichr(0260) + "C"
         print toPrint
 
-    print "\n[Ctrl+Z to stop]"
+    print "\n[Ctrl+C to stop]"
 
 def readValues (coreNumber) :
     file = open(mainFolder + 'temp' + str(coreNumber) + '_input', 'r')
@@ -77,7 +77,10 @@ def loop():
     if exists(mainFolder):
         while True:            
             printCoreInformation(readCoresInformation())
-            sleep(delay)
+            try:
+                sleep(delay)
+            except KeyboardInterrupt:
+                break
     else:
         print "Cannot find " + mainFolder + "\nAre you on Linux?"
 
